@@ -1,4 +1,5 @@
 from .utils import getxy
+from .color import color
 
 
 logo_str = r""" _ __ __ _ _ __
@@ -24,7 +25,7 @@ def logo():
         print()
 
     for line in logo_lines():
-        print(line.center(x))
+        print(color('cyan', line.center(x)))
 
 
 def stats(cmd):
