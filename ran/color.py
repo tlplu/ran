@@ -10,4 +10,4 @@ def color(clr, txt):
         'cyan': '\x1b[96m',
     }
 
-    return  colors[clr] + txt + '\x1b[0m'
+    return colors[clr] + txt + '\x1b[0m'

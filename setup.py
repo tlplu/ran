@@ -6,12 +6,11 @@ https://github.com/tlplu/ran
 """
 
 import sys
-import os
-
-if sys.version_info < (3,0):
-    sys.exit('Ran requires python 3.')
 
 from setuptools import setup
+
+if sys.version_info < (3, 0):
+    sys.exit('Ran requires python 3.')
 
 setup(
     name='ran',
