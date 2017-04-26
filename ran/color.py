@@ -11,3 +11,8 @@ def color(clr, txt):
     }
 
     return colors[clr] + txt + '\x1b[0m'
+
+
+def underline(ctxt):
+    """ Underline colorful text. """
+    return ctxt[0:2] + '4;' + ctxt[2:]
