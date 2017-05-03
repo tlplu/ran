@@ -9,7 +9,11 @@ def main():
     while True:
         logo()
         commands(cmd)
-        cmd = message(cmd)
+
+        if cmd in ['l', 'log']:
+            cmd = ''
+        else:
+            cmd = message(cmd)
 
         if cmd in ['q', 'quit', 'exit']:
             print('Bye!')
