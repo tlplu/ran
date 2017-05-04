@@ -119,6 +119,32 @@ def get_type(cancel, workout):
     return (cancel, workout)
 
 
+def get_duration(cancel, workout):
+    """ Get run duration. """
+    if not cancel:
+        logo()
+        details(workout)
+
+        print('Enter duration of run in h:m:s.ms or [c]ancel')
+
+        while not cancel:
+            dur = input('> ')
+
+            if dur in ['c', 'cancel']:
+                cancel = True
+            else:
+                try:
+                    dur = datetime.datetime.strptime(dur, '%H:%M:%S.%f')
+                    workout['run']['duration'] = dur.strftime('%H:%M:%S.%f')[:-3]
+                    break
+                except ValueError:
+                    logo()
+                    details(workout)
+                    print('Bad format, enter duration in h:m:s.ms format')
+
+    return (cancel, workout)
+
+
 def details(workout):
     """ Display workouts details"""
     x, y = getxy()
@@ -166,3 +192,4 @@ def log():
 
     (cancel, workout) = get_date(cancel, workout)
     (cancel, workout) = get_type(cancel, workout)
+    (cancel, workout) = get_duration(cancel, workout)
