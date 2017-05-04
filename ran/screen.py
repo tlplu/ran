@@ -145,6 +145,35 @@ def get_duration(cancel, workout):
     return (cancel, workout)
 
 
+def get_distance(cancel, workout):
+    """ Get run distance. """
+    if not cancel:
+        logo()
+        details(workout)
+
+        print('Enter distance of run (meters) or [c]ancel')
+
+        while not cancel:
+            m = input('> ')
+
+            if m in ['c', 'cancel']:
+                cancel = True
+            else:
+                try:
+                    m = int(m)
+                    if m > 0:
+                        workout['run']['distance'] = str(m)
+                        break
+                    else:
+                        raise ValueError
+                except ValueError:
+                    logo()
+                    details(workout)
+                    print('Bad format, enter distance (positive integer)')
+
+    return (cancel, workout)
+
+
 def details(workout):
     """ Display workouts details"""
     x, y = getxy()
@@ -193,3 +222,4 @@ def log():
     (cancel, workout) = get_date(cancel, workout)
     (cancel, workout) = get_type(cancel, workout)
     (cancel, workout) = get_duration(cancel, workout)
+    (cancel, workout) = get_distance(cancel, workout)
