@@ -66,49 +66,8 @@ def hlp():
         print()
 
 
-def log():
-    """ Log workout. """
-
-    def details(workout):
-        """ Display workouts details"""
-        for i in range(y - 22):
-            print()
-
-        print('\t ' + underline(color('green', 'Workout details')))
-        print()
-        print('\t\t ' + color('green', 'date: ') + workout['date'])
-        print('\t\t ' + color('green', 'run: '))
-        print(
-            '\t\t   ' + color('green', 'type:') +
-            '\t' + workout['run']['type'])
-        print(
-            '\t\t   ' + color('green', 'duration: ') +
-            '\t' + workout['run']['duration'])
-        print(
-            '\t\t   ' + color('green', 'distance: ') +
-            '\t' + workout['run']['distance'])
-        print('\t\t ' + color('green', 'strength: '))
-        print(
-            '\t\t   ' + color('green', 'pull-ups: ') +
-            '\t' + workout['strength']['pull-ups'])
-        print(
-            '\t\t   ' + color('green', 'push-ups: ') +
-            '\t' + workout['strength']['push-ups'])
-        print(
-            '\t\t   ' + color('green', 'abs: ') +
-            '\t' + workout['strength']['abs'])
-
-        for i in range(3):
-            print()
-
-    x, y = getxy()
-    workout = {
-        'date': '',
-        'run': {'type': '', 'duration': '', 'distance': ''},
-        'strength': {'pull-ups': '', 'push-ups': '', 'abs': ''}
-    }
-    cancel = False
-
+def get_date(cancel, workout):
+    """ Get run date """
     details(workout)
     print('Enter date in YYYY-mm-dd format (default today) or [c]ancel')
 
@@ -120,19 +79,24 @@ def log():
         else:
             if date == '':
                 date = datetime.date.today()
+                workout['date'] = date.strftime('%Y-%m-%d')
                 break
             else:
                 try:
                     date = datetime.datetime.strptime(date, '%Y-%m-%d')
+                    workout['date'] = date.strftime('%Y-%m-%d')
                     break
                 except ValueError:
                     logo()
                     details(workout)
                     print('Bad format, enter date in YYYY-mm-dd format')
 
-    if not cancel:
-        workout['date'] = date.strftime('%Y-%m-%d')
+    return (cancel, workout)
 
+
+def get_type(cancel, workout):
+    """ Get run type """
+    if not cancel:
         logo()
         details(workout)
 
@@ -146,10 +110,59 @@ def log():
             else:
                 if run in ['base', '']:
                     workout['run']['type'] = 'base'
-                    logo()
-                    details(workout)
                     break
                 else:
                     logo()
                     details(workout)
                     print('Bad type, enter type of run or [c]ancel')
+
+    return (cancel, workout)
+
+
+def details(workout):
+    """ Display workouts details"""
+    x, y = getxy()
+
+    for i in range(y - 22):
+        print()
+
+    print('\t ' + underline(color('green', 'Workout details')))
+    print()
+    print('\t\t ' + color('green', 'date: ') + workout['date'])
+    print('\t\t ' + color('green', 'run: '))
+    print(
+        '\t\t   ' + color('green', 'type:') +
+        '\t' + workout['run']['type'])
+    print(
+        '\t\t   ' + color('green', 'duration: ') +
+        '\t' + workout['run']['duration'])
+    print(
+        '\t\t   ' + color('green', 'distance: ') +
+        '\t' + workout['run']['distance'])
+    print('\t\t ' + color('green', 'strength: '))
+    print(
+        '\t\t   ' + color('green', 'pull-ups: ') +
+        '\t' + workout['strength']['pull-ups'])
+    print(
+        '\t\t   ' + color('green', 'push-ups: ') +
+        '\t' + workout['strength']['push-ups'])
+    print(
+        '\t\t   ' + color('green', 'abs: ') +
+        '\t' + workout['strength']['abs'])
+
+    for i in range(3):
+        print()
+
+
+def log():
+    """ Log workout. """
+
+    workout = {
+        'date': '',
+        'run': {'type': '', 'duration': '', 'distance': ''},
+        'strength': {'pull-ups': '', 'push-ups': '', 'abs': ''}
+    }
+    cancel = False
+
+    (cancel, workout) = get_date(cancel, workout)
+    (cancel, workout) = get_type(cancel, workout)
