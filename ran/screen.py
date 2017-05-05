@@ -174,6 +174,36 @@ def get_distance(cancel, workout):
     return (cancel, workout)
 
 
+def get_sets(cancel, workout, s):
+    """ Get sets. """
+    if not cancel:
+        logo()
+        details(workout)
+
+        print('Enter', s, '(e.g. "10, 8, 6" for 3 sets) or [c]ancel')
+
+        while not cancel:
+            ups = input('> ')
+
+            if ups in ['c', 'cancel']:
+                cancel = True
+            else:
+                try:
+                    ups = ups.split(', ')
+                    ups = [int(x) for x in ups]
+                    for x in ups:
+                        if x <= 0:
+                            raise ValueError
+                    workout['strength'][s] = ', '.join(str(i) for i in ups)
+                    break
+                except ValueError:
+                    logo()
+                    details(workout)
+                    print('Bad format, enter', s, '(e.g. "5, 4, 3, ...")')
+
+    return (cancel, workout)
+
+
 def details(workout):
     """ Display workouts details"""
     x, y = getxy()
@@ -223,3 +253,5 @@ def log():
     (cancel, workout) = get_type(cancel, workout)
     (cancel, workout) = get_duration(cancel, workout)
     (cancel, workout) = get_distance(cancel, workout)
+    (cancel, workout) = get_sets(cancel, workout, 'pull-ups')
+    (cancel, workout) = get_sets(cancel, workout, 'push-ups')
