@@ -213,8 +213,8 @@ def details(workout):
 
     print('\t ' + underline(color('green', 'Workout details')))
     print()
-    print('\t\t ' + color('green', 'date: ') + workout['date'])
-    print('\t\t ' + color('green', 'run: '))
+    print('\t\t ' + color('green', 'Date ') + '\t' + workout['date'])
+    print('\t\t ' + color('green', 'Run '))
     print(
         '\t\t   ' + color('green', 'type:') +
         '\t' + workout['run']['type'])
@@ -224,7 +224,7 @@ def details(workout):
     print(
         '\t\t   ' + color('green', 'distance: ') +
         '\t' + workout['run']['distance'])
-    print('\t\t ' + color('green', 'strength: '))
+    print('\t\t ' + color('green', 'Strength '))
     print(
         '\t\t   ' + color('green', 'pull-ups: ') +
         '\t' + workout['strength']['pull-ups'])
@@ -233,7 +233,7 @@ def details(workout):
         '\t' + workout['strength']['push-ups'])
     print(
         '\t\t   ' + color('green', 'abs: ') +
-        '\t' + workout['strength']['abs'])
+        '\t' + workout['strength']['sit-ups'])
 
     for i in range(3):
         print()
@@ -245,7 +245,7 @@ def log():
     workout = {
         'date': '',
         'run': {'type': '', 'duration': '', 'distance': ''},
-        'strength': {'pull-ups': '', 'push-ups': '', 'abs': ''}
+        'strength': {'pull-ups': '', 'push-ups': '', 'sit-ups': ''}
     }
     cancel = False
 
@@ -255,3 +255,4 @@ def log():
     (cancel, workout) = get_distance(cancel, workout)
     (cancel, workout) = get_sets(cancel, workout, 'pull-ups')
     (cancel, workout) = get_sets(cancel, workout, 'push-ups')
+    (cancel, workout) = get_sets(cancel, workout, 'sit-ups')
