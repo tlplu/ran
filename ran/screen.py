@@ -204,6 +204,53 @@ def get_sets(cancel, workout, s):
     return (cancel, workout)
 
 
+def get_run_strength(cancel, workout, f):
+    if not cancel:
+        logo()
+        details(workout)
+
+        if f == 1:
+            print('Did you run? [y]es, [n]o or [c]ancel')
+        else:
+            print('Did you do strength workout? [y]es, [n]o, or [c]ancel')
+        while True:
+            run = input('> ')
+            if run in ['yes', 'y', 'no', 'n', 'cancel', 'c']:
+                if run in ['yes', 'y']:
+                    if f == 1:
+                        (cancel, workout) = get_type(cancel, workout)
+                        (cancel, workout) = get_duration(cancel, workout)
+                        (cancel, workout) = get_distance(cancel, workout)
+                    else:
+                        (cancel, workout) = get_sets(
+                            cancel,
+                            workout,
+                            'pull-ups')
+                        (cancel, workout) = get_sets(
+                            cancel,
+                            workout,
+                            'push-ups')
+                        (cancel, workout) = get_sets(
+                            cancel,
+                            workout,
+                            'sit-ups')
+
+                elif run in ['cancel', 'c']:
+                    cancel = True
+                break
+            else:
+                logo()
+                details(workout)
+                if f == 1:
+                    print('Bad format. Did you run? [y]es or [n]o or [c]ancel')
+                else:
+                    print(
+                        'Bad format. Di you do strength workout?',
+                        '[y]es, [n]o, [c]ancel')
+
+    return (cancel, workout)
+
+
 def details(workout):
     """ Display workouts details"""
     x, y = getxy()
@@ -232,7 +279,7 @@ def details(workout):
         '\t\t   ' + color('green', 'push-ups: ') +
         '\t' + workout['strength']['push-ups'])
     print(
-        '\t\t   ' + color('green', 'abs: ') +
+        '\t\t   ' + color('green', 'sit-ups: ') +
         '\t' + workout['strength']['sit-ups'])
 
     for i in range(3):
@@ -250,9 +297,5 @@ def log():
     cancel = False
 
     (cancel, workout) = get_date(cancel, workout)
-    (cancel, workout) = get_type(cancel, workout)
-    (cancel, workout) = get_duration(cancel, workout)
-    (cancel, workout) = get_distance(cancel, workout)
-    (cancel, workout) = get_sets(cancel, workout, 'pull-ups')
-    (cancel, workout) = get_sets(cancel, workout, 'push-ups')
-    (cancel, workout) = get_sets(cancel, workout, 'sit-ups')
+    (cancel, workout) = get_run_strength(cancel, workout, 1)
+    (cancel, workout) = get_run_strength(cancel, workout, 0)
