@@ -49,25 +49,8 @@ def message(cmd):
     return cmd
 
 
-def hlp():
-    """ Display help. """
-    x, y = getxy()
-
-    for i in range(y - 16):
-        print()
-
-    print('\t ' + underline(color('yellow', 'Help')))
-    print()
-    print('\t Commands:')
-    print('\t\t ' + color('yellow', 'h, help') + ' - display this help text')
-    print('\t\t ' + color('yellow', 'q, quit') + ' - exit ran')
-
-    for i in range(3):
-        print()
-
-
 def get_date(cancel, workout):
-    """ Get run date """
+    """ Get run date. """
     details(workout)
     print('Enter date in YYYY-mm-dd format (default today) or [c]ancel')
 
@@ -95,7 +78,7 @@ def get_date(cancel, workout):
 
 
 def get_type(cancel, workout):
-    """ Get run type """
+    """ Get run type. """
     if not cancel:
         logo()
         details(workout)
@@ -245,14 +228,14 @@ def get_run_strength(cancel, workout, f):
                     print('Bad format. Did you run? [y]es or [n]o or [c]ancel')
                 else:
                     print(
-                        'Bad format. Di you do strength workout?',
+                        'Bad format. Did you do strength workout?',
                         '[y]es, [n]o, [c]ancel')
 
     return (cancel, workout)
 
 
 def details(workout):
-    """ Display workouts details"""
+    """ Display workouts details. """
     x, y = getxy()
 
     for i in range(y - 22):
@@ -284,18 +267,3 @@ def details(workout):
 
     for i in range(3):
         print()
-
-
-def log():
-    """ Log workout. """
-
-    workout = {
-        'date': '',
-        'run': {'type': '', 'duration': '', 'distance': ''},
-        'strength': {'pull-ups': '', 'push-ups': '', 'sit-ups': ''}
-    }
-    cancel = False
-
-    (cancel, workout) = get_date(cancel, workout)
-    (cancel, workout) = get_run_strength(cancel, workout, 1)
-    (cancel, workout) = get_run_strength(cancel, workout, 0)
