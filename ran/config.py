@@ -1,4 +1,5 @@
 import os
+import json
 
 
 def get_config_dir():
@@ -17,6 +18,12 @@ def get_data_file():
     ran_data = os.path.join(get_config_dir(), 'data.json')
 
     if not os.path.exists(ran_data):
-        open(ran_data, 'w').close()
+        with open(ran_data, 'w') as f:
+            json.dump(
+                {'workouts': []},
+                f,
+                indent=4,
+                ensure_ascii=False,
+                separators=(', ', ': '))
 
     return ran_data
