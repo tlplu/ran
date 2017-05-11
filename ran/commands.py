@@ -27,8 +27,15 @@ def log():
     """ Log workout. """
 
     workout = {
-        'date': '',
-        'run': {'type': '', 'duration': '', 'distance': ''},
+        'date': {'year': '', 'month': '', 'day': ''},
+        'run': {
+            'type': '',
+            'duration': {
+                'hour': '',
+                'minute': '',
+                'second': '',
+                'micro': ''},
+            'distance': ''},
         'strength': {'pull-ups': '', 'push-ups': '', 'sit-ups': ''}
     }
     cancel = False

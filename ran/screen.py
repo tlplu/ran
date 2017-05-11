@@ -62,17 +62,20 @@ def get_date(cancel, workout):
         else:
             if date == '':
                 date = datetime.date.today()
-                workout['date'] = date.strftime('%Y-%m-%d')
                 break
             else:
                 try:
                     date = datetime.datetime.strptime(date, '%Y-%m-%d')
-                    workout['date'] = date.strftime('%Y-%m-%d')
                     break
                 except ValueError:
                     logo()
                     details(workout)
                     print('Bad format, enter date in YYYY-mm-dd format')
+
+    if not cancel:
+        workout['date']['year'] = date.year
+        workout['date']['month'] = date.month
+        workout['date']['day'] = date.day
 
     return (cancel, workout)
 
@@ -118,7 +121,11 @@ def get_duration(cancel, workout):
             else:
                 try:
                     dur = datetime.datetime.strptime(dur, '%H:%M:%S.%f')
-                    workout['run']['duration'] = dur.strftime('%H:%M:%S.%f')[:-3]
+                    workout['run']['duration']['hour'] = dur.hour
+                    workout['run']['duration']['minute'] = dur.minute
+                    workout['run']['duration']['second'] = dur.second
+                    workout['run']['duration']['micro'] = (
+                        dur.microsecond // 10000)
                     break
                 except ValueError:
                     logo()
@@ -145,7 +152,7 @@ def get_distance(cancel, workout):
                 try:
                     m = int(m)
                     if m > 0:
-                        workout['run']['distance'] = str(m)
+                        workout['run']['distance'] = m
                         break
                     else:
                         raise ValueError
@@ -177,7 +184,8 @@ def get_sets(cancel, workout, s):
                     for x in ups:
                         if x <= 0:
                             raise ValueError
-                    workout['strength'][s] = ', '.join(str(i) for i in ups)
+
+                    workout['strength'][s] = ups
                     break
                 except ValueError:
                     logo()
@@ -234,6 +242,34 @@ def get_run_strength(cancel, workout, f):
     return (cancel, workout)
 
 
+def date_dict_to_str(date):
+    """ Return date str. """
+    if date['year'] != '':
+        return (
+            str(date['year']) +
+            '-' +
+            str(date['month']) +
+            '-' +
+            str(date['day']))
+    else:
+        return ''
+
+
+def duration_dict_to_str(dur):
+    """ Return duration str. """
+    if dur['hour'] != '':
+        return (
+            str(dur['hour']) +
+            ':' +
+            str(dur['minute']) +
+            ':' +
+            str(dur['second']) +
+            '.' +
+            str(dur['micro']))
+    else:
+        return ''
+
+
 def details(workout):
     """ Display workouts details. """
     x, y = getxy()
@@ -243,27 +279,29 @@ def details(workout):
 
     print('\t ' + underline(color('green', 'Workout details')))
     print()
-    print('\t\t ' + color('green', 'Date ') + '\t' + workout['date'])
+    print(
+        '\t\t ' + color('green', 'Date ') +
+        '\t' + date_dict_to_str(workout['date']))
     print('\t\t ' + color('green', 'Run '))
     print(
         '\t\t   ' + color('green', 'type:') +
         '\t' + workout['run']['type'])
     print(
         '\t\t   ' + color('green', 'duration: ') +
-        '\t' + workout['run']['duration'])
+        '\t' + duration_dict_to_str(workout['run']['duration']))
     print(
         '\t\t   ' + color('green', 'distance: ') +
-        '\t' + workout['run']['distance'])
+        '\t' + str(workout['run']['distance']))
     print('\t\t ' + color('green', 'Strength '))
     print(
         '\t\t   ' + color('green', 'pull-ups: ') +
-        '\t' + workout['strength']['pull-ups'])
+        '\t' + str(workout['strength']['pull-ups']))
     print(
         '\t\t   ' + color('green', 'push-ups: ') +
-        '\t' + workout['strength']['push-ups'])
+        '\t' + str(workout['strength']['push-ups']))
     print(
         '\t\t   ' + color('green', 'sit-ups: ') +
-        '\t' + workout['strength']['sit-ups'])
+        '\t' + str(workout['strength']['sit-ups']))
 
     for i in range(3):
         print()
