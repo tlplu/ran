@@ -242,32 +242,22 @@ def get_run_strength(cancel, workout, f):
     return (cancel, workout)
 
 
-def date_dict_to_str(date):
-    """ Return date str. """
-    if date['year'] != '':
-        return (
-            str(date['year']) +
-            '-' +
-            str(date['month']) +
-            '-' +
-            str(date['day']))
-    else:
+def dict_to_str(dct):
+    """ Return dictionary string. """
+    k = list(dct.keys())
+    if dct[k[0]] == '':
         return ''
-
-
-def duration_dict_to_str(dur):
-    """ Return duration str. """
-    if dur['hour'] != '':
-        return (
-            str(dur['hour']) +
-            ':' +
-            str(dur['minute']) +
-            ':' +
-            str(dur['second']) +
-            '.' +
-            str(dur['micro']))
     else:
-        return ''
+        if k[0] == 'hour':
+            sep = [':', ':', '.']
+        elif k[0] == 'year':
+            sep = ['-', '-']
+
+        v = [str(x) for x in list(dct.values())]
+
+        r = v + sep
+        r[::2], r[1::2] = v, sep
+        return ''.join(r)
 
 
 def details(workout):
@@ -281,14 +271,14 @@ def details(workout):
     print()
     print(
         '\t\t ' + color('green', 'Date ') +
-        '\t' + date_dict_to_str(workout['date']))
+        '\t' + dict_to_str(workout['date']))
     print('\t\t ' + color('green', 'Run '))
     print(
         '\t\t   ' + color('green', 'type:') +
         '\t' + workout['run']['type'])
     print(
         '\t\t   ' + color('green', 'duration: ') +
-        '\t' + duration_dict_to_str(workout['run']['duration']))
+        '\t' + dict_to_str(workout['run']['duration']))
     print(
         '\t\t   ' + color('green', 'distance: ') +
         '\t' + str(workout['run']['distance']))
