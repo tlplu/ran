@@ -8,3 +8,6 @@ install:
 
 script:
   - py.test --cov=ran
+
+after_success:
+  - codecov
