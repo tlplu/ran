@@ -44,10 +44,6 @@ def message(cmd):
     else:
         print('Enter [h]elp')
 
-    cmd = input('> ')
-
-    return cmd
-
 
 def get_date(cancel, workout):
     """ Get run date. """

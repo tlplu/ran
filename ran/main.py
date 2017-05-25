@@ -13,7 +13,8 @@ def main():
         if cmd in ['l', 'log']:
             cmd = ''
         else:
-            cmd = message(cmd)
+            message(cmd)
+            cmd = input('> ')
 
         if cmd in ['q', 'quit', 'exit']:
             print('Bye!')
