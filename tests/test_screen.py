@@ -1,6 +1,6 @@
 import os
 
-from ran.screen import logo_lines, message, logo
+from ran.screen import logo_lines, message, logo, stats
 
 
 class TestLogo():
@@ -45,3 +45,15 @@ class TestMessage:
         out, err = capsys.readouterr()
 
         assert out == '\x1b[91mBad syntax, enter [h]elp\x1b[0m\n'
+
+
+def test_stats(monkeypatch, capsys):
+    def mockreturn(fd):
+        return(42, 10)
+
+    monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
+    stats('')
+
+    out, err = capsys.readouterr()
+
+    assert out == '\n\n'
