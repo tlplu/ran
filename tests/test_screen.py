@@ -2,7 +2,7 @@ import os
 import pytest
 import datetime
 
-from ran.screen import logo_lines, message, logo, stats, get_date
+from ran.screen import logo_lines, message, logo, stats, get_date, get_type
 
 
 class TestLogo():
@@ -66,7 +66,7 @@ def workout():
     data = {
         'date': {'year': 123, 'month': 1, 'day': 12},
         'run': {
-            'type': 'base',
+            'type': 'test',
             'duration': {
                 'hour': 0,
                 'minute': 50,
@@ -107,7 +107,7 @@ class TestGetDate:
 
     def test_get_date_with_true_cancel_arg(self, monkeypatch):
 
-        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
@@ -149,3 +149,40 @@ class TestGetDate:
 
         assert not cancel
         assert list(data['date'].values()) == [2017, 5, 29]
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+class TestGetType:
+
+    def test_get_type_with_true_cancel_arg(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = True
+        (cancel, data) = get_type(cancel, workout())
+
+        assert cancel
+        assert data['run']['type'] == 'test'
+
+    def test_get_type_with_cancel_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_type(cancel, workout())
+
+        assert cancel
+        assert data['run']['type'] == 'test'
+
+    def test_get_type_with_default_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_type(cancel, workout())
+
+        assert not cancel
+        assert data['run']['type'] == 'base'
