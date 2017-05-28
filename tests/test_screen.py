@@ -3,7 +3,7 @@ import pytest
 import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
-from ran.screen import get_duration
+from ran.screen import get_duration, get_distance
 
 
 class TestLogo():
@@ -224,3 +224,40 @@ class TestGetDuration:
 
         assert not cancel
         assert list(data['run']['duration'].values()) == [0, 51, 0, 0]
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+class TestGetDistance:
+
+    def test_get_distance_with_true_cancel_arg(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = True
+        (cancel, data) = get_distance(cancel, workout())
+
+        assert cancel
+        assert data['run']['distance'] == 11300
+
+    def test_get_distance_with_cancel_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_distance(cancel, workout())
+
+        assert cancel
+        assert data['run']['distance'] == 11300
+
+    def test_get_distance_with_valid_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '11400')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_distance(cancel, workout())
+
+        assert not cancel
+        assert data['run']['distance'] == 11400
