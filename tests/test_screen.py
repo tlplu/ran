@@ -3,6 +3,7 @@ import pytest
 import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
+from ran.screen import get_duration
 
 
 class TestLogo():
@@ -186,3 +187,40 @@ class TestGetType:
 
         assert not cancel
         assert data['run']['type'] == 'base'
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+class TestGetDuration:
+
+    def test_get_duration_with_true_cancel_arg(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = True
+        (cancel, data) = get_duration(cancel, workout())
+
+        assert cancel
+        assert list(data['run']['duration'].values()) == [0, 50, 0, 0]
+
+    def test_get_duration_with_cancel_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_duration(cancel, workout())
+
+        assert cancel
+        assert list(data['run']['duration'].values()) == [0, 50, 0, 0]
+
+    def test_get_duration_with_valid_input(self, monkeypatch):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '0:51:0.0')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_duration(cancel, workout())
+
+        assert not cancel
+        assert list(data['run']['duration'].values()) == [0, 51, 0, 0]
