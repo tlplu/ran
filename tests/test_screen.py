@@ -265,15 +265,14 @@ class TestGetDistance:
         assert data['run']['distance'] == 11400
 
 
-@pytest.fixture(
-    scope='class',
-    params=['pull-ups', 'push-ups', 'sit-ups'])
-def exercise(request):
-    return request.param
-
-
 @pytest.mark.usefixtures('workout', 'mockreturn')
 class TestGetSets:
+
+    @pytest.fixture(
+        scope='class',
+        params=['pull-ups', 'push-ups', 'sit-ups'])
+    def exercise(self, request):
+        return request.param
 
     def test_get_sets_with_true_cancel_arg(self, monkeypatch, exercise):
 
