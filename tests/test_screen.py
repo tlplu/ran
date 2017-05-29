@@ -3,7 +3,7 @@ import pytest
 import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
-from ran.screen import get_duration, get_distance
+from ran.screen import get_duration, get_distance, get_sets
 
 
 class TestLogo():
@@ -82,12 +82,14 @@ def workout():
                 11
             ],
             'push-ups': [
-                45,
-                40,
-                35
+                17,
+                14,
+                11
             ],
             'sit-ups': [
-                1000
+                17,
+                14,
+                11
             ]
         }
     }
@@ -261,3 +263,47 @@ class TestGetDistance:
 
         assert not cancel
         assert data['run']['distance'] == 11400
+
+
+@pytest.fixture(
+    scope='class',
+    params=['pull-ups', 'push-ups', 'sit-ups'])
+def exercise(request):
+    return request.param
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+class TestGetSets:
+
+    def test_get_sets_with_true_cancel_arg(self, monkeypatch, exercise):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = True
+        (cancel, data) = get_sets(cancel, workout(), exercise)
+
+        assert cancel
+        assert data['strength'][exercise] == [17, 14, 11]
+
+    def test_get_sets_with_cancel_input(self, monkeypatch, exercise):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_sets(cancel, workout(), exercise)
+
+        assert cancel
+        assert data['strength'][exercise] == [17, 14, 11]
+
+    def test_get_sets_with_valid_input(self, monkeypatch, exercise):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '110, 220')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_sets(cancel, workout(), exercise)
+
+        assert not cancel
+        assert data['strength'][exercise] == [110, 220]
