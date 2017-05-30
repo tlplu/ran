@@ -266,27 +266,27 @@ def details(workout):
     print('\t ' + underline(color('green', 'Workout details')))
     print()
     print(
-        '\t\t ' + color('green', 'Date ') +
+        '\t\t ' + color('green', 'Date') +
         '\t' + dict_to_str(workout['date']))
-    print('\t\t ' + color('green', 'Run '))
+    print('\t\t ' + color('green', 'Run'))
     print(
         '\t\t   ' + color('green', 'type:') +
         '\t' + workout['run']['type'])
     print(
-        '\t\t   ' + color('green', 'duration: ') +
+        '\t\t   ' + color('green', 'duration:') +
         '\t' + dict_to_str(workout['run']['duration']))
     print(
-        '\t\t   ' + color('green', 'distance: ') +
+        '\t\t   ' + color('green', 'distance:') +
         '\t' + str(workout['run']['distance']))
-    print('\t\t ' + color('green', 'Strength '))
+    print('\t\t ' + color('green', 'Strength'))
     print(
-        '\t\t   ' + color('green', 'pull-ups: ') +
+        '\t\t   ' + color('green', 'pull-ups:') +
         '\t' + str(workout['strength']['pull-ups']))
     print(
-        '\t\t   ' + color('green', 'push-ups: ') +
+        '\t\t   ' + color('green', 'push-ups:') +
         '\t' + str(workout['strength']['push-ups']))
     print(
-        '\t\t   ' + color('green', 'sit-ups: ') +
+        '\t\t   ' + color('green', 'sit-ups:') +
         '\t' + str(workout['strength']['sit-ups']))
 
     for i in range(3):
