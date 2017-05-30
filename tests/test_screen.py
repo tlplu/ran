@@ -4,6 +4,7 @@ import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
 from ran.screen import get_duration, get_distance, get_sets, dict_to_str
+from ran.screen import details
 
 
 class TestLogo():
@@ -335,3 +336,25 @@ class TestDictToStr:
     def test_dict_to_str_with_duration(self):
         duration = {'hour': 1, 'minute': 15, 'second': 0, 'micro': 0}
         assert dict_to_str(duration) == '1:15:0.0'
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+def test_details(monkeypatch, capsys):
+
+    monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+    details(workout())
+
+    out, err = capsys.readouterr()
+    text = (
+        '\n\n\t \x1b[4;92mWorkout details\x1b[0m\n' +
+        '\n\t\t \x1b[92mDate\x1b[0m\t123-1-12\n' +
+        '\t\t \x1b[92mRun\x1b[0m\n' +
+        '\t\t   \x1b[92mtype:\x1b[0m\ttest\n' +
+        '\t\t   \x1b[92mduration:\x1b[0m\t0:50:0.0\n' +
+        '\t\t   \x1b[92mdistance:\x1b[0m\t11300\n' +
+        '\t\t \x1b[92mStrength\x1b[0m\n' +
+        '\t\t   \x1b[92mpull-ups:\x1b[0m\t[17, 14, 11]\n' +
+        '\t\t   \x1b[92mpush-ups:\x1b[0m\t[17, 14, 11]\n' +
+        '\t\t   \x1b[92msit-ups:\x1b[0m\t[17, 14, 11]\n\n\n\n')
+
+    assert out == text
