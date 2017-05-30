@@ -3,7 +3,7 @@ import pytest
 import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
-from ran.screen import get_duration, get_distance, get_sets
+from ran.screen import get_duration, get_distance, get_sets, dict_to_str
 
 
 class TestLogo():
@@ -306,3 +306,32 @@ class TestGetSets:
 
         assert not cancel
         assert data['strength'][exercise] == [110, 220]
+
+
+class TestDictToStr:
+
+    @pytest.fixture(
+        scope='class',
+        params=[
+            {
+                'year': '',
+                'month': '',
+                'day': ''},
+            {
+                'hour': '',
+                'minute': '',
+                'second': '',
+                'micro': ''}])
+    def dicts(self, request):
+        return request.param
+
+    def test_dict_to_str_with_empty_arg(self, dicts):
+        assert dict_to_str(dicts) == ''
+
+    def test_dict_to_str_with_date(self):
+        date = {'year': 2017, 'month': 2, 'day': 1}
+        assert dict_to_str(date) == '2017-2-1'
+
+    def test_dict_to_str_with_duration(self):
+        duration = {'hour': 1, 'minute': 15, 'second': 0, 'micro': 0}
+        assert dict_to_str(duration) == '1:15:0.0'
