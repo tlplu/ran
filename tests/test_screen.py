@@ -4,7 +4,7 @@ import datetime
 
 from ran.screen import logo_lines, message, logo, stats, get_date, get_type
 from ran.screen import get_duration, get_distance, get_sets, dict_to_str
-from ran.screen import details
+from ran.screen import details, get_run_strength
 
 
 class TestLogo():
@@ -358,3 +358,35 @@ def test_details(monkeypatch, capsys):
         '\t\t   \x1b[92msit-ups:\x1b[0m\t[17, 14, 11]\n\n\n\n')
 
     assert out == text
+
+
+@pytest.mark.usefixtures('workout', 'mockreturn')
+class TestGetRunStrength:
+
+    @pytest.fixture(
+        scope='class',
+        params=[1, 0])
+    def flag(self, request):
+        return request.param
+
+    def test_get_run_strength_with_true_cancel_arg(self, monkeypatch, flag):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: '')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = True
+        (cancel, data) = get_run_strength(cancel, workout(), flag)
+
+        assert cancel
+        assert data == workout()
+
+    def test_get_run_strength_with_cancel_input(self, monkeypatch, flag):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: 'c')
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = get_run_strength(cancel, workout(), flag)
+
+        assert cancel
+        assert data == workout()
