@@ -1,7 +1,7 @@
 import datetime
 
-from .utils import getxy
-from .color import color, underline
+import ran.utils
+import ran.color
 
 
 logo_str = r""" _ __ __ _ _ __
@@ -21,19 +21,19 @@ def logo_lines():
 
 def logo():
     """ Display logo. """
-    x, y = getxy()
+    x, y = ran.utils.getxy()
 
     for i in range(2):
         print()
 
     for line in logo_lines():
-        print(color('cyan', line.center(x)))
+        print(ran.color.color('cyan', line.center(x)))
 
 
 def message(cmd):
     """ Display message and prompt and return input. """
     if cmd not in ['', 'h', 'help']:
-        print(color('red', 'Bad syntax, enter [h]elp'))
+        print(ran.color.color('red', 'Bad syntax, enter [h]elp'))
     else:
         print('Enter [h]elp')
 
@@ -251,35 +251,36 @@ def dict_to_str(dct):
 
 def details(workout):
     """ Display workouts details. """
-    x, y = getxy()
+    x, y = ran.utils.getxy()
 
     for i in range(y - 22):
         print()
 
-    print('\t ' + underline(color('green', 'Workout details')))
+    print('\t ' + ran.color.underline(
+        ran.color.color('green', 'Workout details')))
     print()
     print(
-        '\t\t ' + color('green', 'Date') +
+        '\t\t ' + ran.color.color('green', 'Date') +
         '\t' + dict_to_str(workout['date']))
-    print('\t\t ' + color('green', 'Run'))
+    print('\t\t ' + ran.color.color('green', 'Run'))
     print(
-        '\t\t   ' + color('green', 'type:') +
+        '\t\t   ' + ran.color.color('green', 'type:') +
         '\t' + workout['run']['type'])
     print(
-        '\t\t   ' + color('green', 'duration:') +
+        '\t\t   ' + ran.color.color('green', 'duration:') +
         '\t' + dict_to_str(workout['run']['duration']))
     print(
-        '\t\t   ' + color('green', 'distance:') +
+        '\t\t   ' + ran.color.color('green', 'distance:') +
         '\t' + str(workout['run']['distance']))
-    print('\t\t ' + color('green', 'Strength'))
+    print('\t\t ' + ran.color.color('green', 'Strength'))
     print(
-        '\t\t   ' + color('green', 'pull-ups:') +
+        '\t\t   ' + ran.color.color('green', 'pull-ups:') +
         '\t' + str(workout['strength']['pull-ups']))
     print(
-        '\t\t   ' + color('green', 'push-ups:') +
+        '\t\t   ' + ran.color.color('green', 'push-ups:') +
         '\t' + str(workout['strength']['push-ups']))
     print(
-        '\t\t   ' + color('green', 'sit-ups:') +
+        '\t\t   ' + ran.color.color('green', 'sit-ups:') +
         '\t' + str(workout['strength']['sit-ups']))
 
     for i in range(3):

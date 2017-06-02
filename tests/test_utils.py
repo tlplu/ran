@@ -1,6 +1,6 @@
 import os
 
-from ran.utils import getxy
+import ran.utils
 
 
 def test_getxy(monkeypatch):
@@ -8,6 +8,6 @@ def test_getxy(monkeypatch):
         return (42, 24)
 
     monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
-    x, y = getxy()
+    x, y = ran.utils.getxy()
 
     assert (x, y) == (42, 24)

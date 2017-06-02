@@ -1,8 +1,7 @@
 import os
 import pytest
-import ran.commands
 
-from ran.commands import hlp, commands, stats
+import ran.commands
 
 
 def test_hlp(monkeypatch, capsys):
@@ -10,7 +9,7 @@ def test_hlp(monkeypatch, capsys):
         return(42, 17)
 
     monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
-    hlp()
+    ran.commands.hlp()
 
     out, err = capsys.readouterr()
     text = (
@@ -27,7 +26,7 @@ def test_stats(monkeypatch, capsys):
         return(42, 10)
 
     monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
-    stats('')
+    ran.commands.stats('')
 
     out, err = capsys.readouterr()
 
@@ -47,7 +46,7 @@ class TestCommands:
             print(42)
 
         monkeypatch.setattr(ran.commands, 'hlp', mockreturn)
-        commands(helps)
+        ran.commands.commands(helps)
 
         out, err = capsys.readouterr()
 
@@ -64,7 +63,7 @@ class TestCommands:
             print('log')
 
         monkeypatch.setattr(ran.commands, 'log', mockreturn)
-        commands(logs)
+        ran.commands.commands(logs)
 
         out, err = capsys.readouterr()
 
@@ -75,7 +74,7 @@ class TestCommands:
             print(cmd)
 
         monkeypatch.setattr(ran.commands, 'stats', mockreturn)
-        commands('42')
+        ran.commands.commands('42')
 
         out, err = capsys.readouterr()
 

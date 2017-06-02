@@ -2,9 +2,7 @@ import os
 import pytest
 import datetime
 
-from ran.screen import logo_lines, message, logo, get_date, get_type
-from ran.screen import get_duration, get_distance, get_sets, dict_to_str
-from ran.screen import details, get_run_strength
+import ran.screen
 
 
 class TestLogo():
@@ -16,14 +14,14 @@ class TestLogo():
             '| | | (_| | | | |',
             '|_|  \\__,_|_| |_|']
 
-        assert logo_lines() == lg
+        assert ran.screen.logo_lines() == lg
 
     def test_logo(self, monkeypatch, capsys):
         def mockreturn(fd):
             return (15, 42)
 
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
-        logo()
+        ran.screen.logo()
 
         out, err = capsys.readouterr()
 
@@ -39,13 +37,13 @@ class TestLogo():
 class TestMessage:
 
     def test_message_with_valid_command(self, capsys):
-        message('')
+        ran.screen.message('')
         out, err = capsys.readouterr()
 
         assert out == 'Enter [h]elp\n'
 
     def test_message_with_invalid_command(self, capsys):
-        message('none')
+        ran.screen.message('none')
         out, err = capsys.readouterr()
 
         assert out == '\x1b[91mBad syntax, enter [h]elp\x1b[0m\n'
@@ -103,7 +101,7 @@ class TestGetDate:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_date(cancel, workout())
+        (cancel, data) = ran.screen.get_date(cancel, workout())
 
         assert cancel
         assert list(data['date'].values()) == [123, 1, 12]
@@ -114,7 +112,7 @@ class TestGetDate:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_date(cancel, workout())
+        (cancel, data) = ran.screen.get_date(cancel, workout())
 
         assert cancel
         assert list(data['date'].values()) == [123, 1, 12]
@@ -126,7 +124,7 @@ class TestGetDate:
         t = datetime.date.today()
 
         cancel = False
-        (cancel, data) = get_date(cancel, workout())
+        (cancel, data) = ran.screen.get_date(cancel, workout())
 
         assert not cancel
         assert list(data['date'].values()) == [t.year, t.month, t.day]
@@ -137,7 +135,7 @@ class TestGetDate:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_date(cancel, workout())
+        (cancel, data) = ran.screen.get_date(cancel, workout())
 
         assert not cancel
         assert list(data['date'].values()) == [2017, 5, 29]
@@ -152,7 +150,7 @@ class TestGetType:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_type(cancel, workout())
+        (cancel, data) = ran.screen.get_type(cancel, workout())
 
         assert cancel
         assert data['run']['type'] == 'test'
@@ -163,7 +161,7 @@ class TestGetType:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_type(cancel, workout())
+        (cancel, data) = ran.screen.get_type(cancel, workout())
 
         assert cancel
         assert data['run']['type'] == 'test'
@@ -174,7 +172,7 @@ class TestGetType:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_type(cancel, workout())
+        (cancel, data) = ran.screen.get_type(cancel, workout())
 
         assert not cancel
         assert data['run']['type'] == 'base'
@@ -189,7 +187,7 @@ class TestGetDuration:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_duration(cancel, workout())
+        (cancel, data) = ran.screen.get_duration(cancel, workout())
 
         assert cancel
         assert list(data['run']['duration'].values()) == [0, 50, 0, 0]
@@ -200,7 +198,7 @@ class TestGetDuration:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_duration(cancel, workout())
+        (cancel, data) = ran.screen.get_duration(cancel, workout())
 
         assert cancel
         assert list(data['run']['duration'].values()) == [0, 50, 0, 0]
@@ -211,7 +209,7 @@ class TestGetDuration:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_duration(cancel, workout())
+        (cancel, data) = ran.screen.get_duration(cancel, workout())
 
         assert not cancel
         assert list(data['run']['duration'].values()) == [0, 51, 0, 0]
@@ -226,7 +224,7 @@ class TestGetDistance:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_distance(cancel, workout())
+        (cancel, data) = ran.screen.get_distance(cancel, workout())
 
         assert cancel
         assert data['run']['distance'] == 11300
@@ -237,7 +235,7 @@ class TestGetDistance:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_distance(cancel, workout())
+        (cancel, data) = ran.screen.get_distance(cancel, workout())
 
         assert cancel
         assert data['run']['distance'] == 11300
@@ -248,7 +246,7 @@ class TestGetDistance:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_distance(cancel, workout())
+        (cancel, data) = ran.screen.get_distance(cancel, workout())
 
         assert not cancel
         assert data['run']['distance'] == 11400
@@ -269,7 +267,7 @@ class TestGetSets:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_sets(cancel, workout(), exercise)
+        (cancel, data) = ran.screen.get_sets(cancel, workout(), exercise)
 
         assert cancel
         assert data['strength'][exercise] == [17, 14, 11]
@@ -280,7 +278,7 @@ class TestGetSets:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_sets(cancel, workout(), exercise)
+        (cancel, data) = ran.screen.get_sets(cancel, workout(), exercise)
 
         assert cancel
         assert data['strength'][exercise] == [17, 14, 11]
@@ -291,7 +289,7 @@ class TestGetSets:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_sets(cancel, workout(), exercise)
+        (cancel, data) = ran.screen.get_sets(cancel, workout(), exercise)
 
         assert not cancel
         assert data['strength'][exercise] == [110, 220]
@@ -315,22 +313,22 @@ class TestDictToStr:
         return request.param
 
     def test_dict_to_str_with_empty_arg(self, dicts):
-        assert dict_to_str(dicts) == ''
+        assert ran.screen.dict_to_str(dicts) == ''
 
     def test_dict_to_str_with_date(self):
         date = {'year': 2017, 'month': 2, 'day': 1}
-        assert dict_to_str(date) == '2017-2-1'
+        assert ran.screen.dict_to_str(date) == '2017-2-1'
 
     def test_dict_to_str_with_duration(self):
         duration = {'hour': 1, 'minute': 15, 'second': 0, 'micro': 0}
-        assert dict_to_str(duration) == '1:15:0.0'
+        assert ran.screen.dict_to_str(duration) == '1:15:0.0'
 
 
 @pytest.mark.usefixtures('workout', 'mockreturn')
 def test_details(monkeypatch, capsys):
 
     monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
-    details(workout())
+    ran.screen.details(workout())
 
     out, err = capsys.readouterr()
     text = (
@@ -363,7 +361,7 @@ class TestGetRunStrength:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = True
-        (cancel, data) = get_run_strength(cancel, workout(), flag)
+        (cancel, data) = ran.screen.get_run_strength(cancel, workout(), flag)
 
         assert cancel
         assert data == workout()
@@ -374,7 +372,7 @@ class TestGetRunStrength:
         monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
 
         cancel = False
-        (cancel, data) = get_run_strength(cancel, workout(), flag)
+        (cancel, data) = ran.screen.get_run_strength(cancel, workout(), flag)
 
         assert cancel
         assert data == workout()
