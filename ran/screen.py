@@ -30,13 +30,6 @@ def logo():
         print(color('cyan', line.center(x)))
 
 
-def stats(cmd):
-    """ Display stats. """
-    x, y = getxy()
-    for i in range(y - 8):
-        print()
-
-
 def message(cmd):
     """ Display message and prompt and return input. """
     if cmd not in ['', 'h', 'help']:

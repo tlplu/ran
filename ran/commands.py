@@ -2,7 +2,7 @@ import json
 
 from .utils import getxy
 from .color import color, underline
-from .screen import get_date, get_run_strength, stats
+from .screen import get_date, get_run_strength
 from .config import get_data_file
 
 
@@ -58,6 +58,13 @@ def log():
                 indent=4,
                 ensure_ascii=False,
                 separators=(', ', ': '))
+
+
+def stats(cmd):
+    """ Display stats. """
+    x, y = getxy()
+    for i in range(y - 8):
+        print()
 
 
 def commands(cmd):

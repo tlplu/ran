@@ -1,6 +1,6 @@
 import os
 
-from ran.commands import hlp
+from ran.commands import hlp, stats
 
 
 def test_hlp(monkeypatch, capsys):
@@ -18,3 +18,15 @@ def test_hlp(monkeypatch, capsys):
         '\t\t \x1b[93mq, quit\x1b[0m - exit ran\n\n\n\n')
 
     assert out == text
+
+
+def test_stats(monkeypatch, capsys):
+    def mockreturn(fd):
+        return(42, 10)
+
+    monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
+    stats('')
+
+    out, err = capsys.readouterr()
+
+    assert out == '\n\n'

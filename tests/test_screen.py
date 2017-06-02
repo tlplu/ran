@@ -2,7 +2,7 @@ import os
 import pytest
 import datetime
 
-from ran.screen import logo_lines, message, logo, stats, get_date, get_type
+from ran.screen import logo_lines, message, logo, get_date, get_type
 from ran.screen import get_duration, get_distance, get_sets, dict_to_str
 from ran.screen import details, get_run_strength
 
@@ -49,18 +49,6 @@ class TestMessage:
         out, err = capsys.readouterr()
 
         assert out == '\x1b[91mBad syntax, enter [h]elp\x1b[0m\n'
-
-
-def test_stats(monkeypatch, capsys):
-    def mockreturn(fd):
-        return(42, 10)
-
-    monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
-    stats('')
-
-    out, err = capsys.readouterr()
-
-    assert out == '\n\n'
 
 
 @pytest.fixture()
