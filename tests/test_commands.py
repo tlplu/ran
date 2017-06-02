@@ -1,6 +1,8 @@
 import os
+import pytest
+import ran.commands
 
-from ran.commands import hlp, stats
+from ran.commands import hlp, commands, stats
 
 
 def test_hlp(monkeypatch, capsys):
@@ -30,3 +32,51 @@ def test_stats(monkeypatch, capsys):
     out, err = capsys.readouterr()
 
     assert out == '\n\n'
+
+
+class TestCommands:
+
+    @pytest.fixture(
+        scope='class',
+        params=['h', 'help'])
+    def helps(self, request):
+        return request.param
+
+    def test_commands_with_help_arg(self, monkeypatch, capsys, helps):
+        def mockreturn():
+            print(42)
+
+        monkeypatch.setattr(ran.commands, 'hlp', mockreturn)
+        commands(helps)
+
+        out, err = capsys.readouterr()
+
+        assert out == '42\n'
+
+    @pytest.fixture(
+        scope='class',
+        params=['l', 'log'])
+    def logs(self, request):
+        return request.param
+
+    def test_commands_with_log_arg(self, monkeypatch, capsys, logs):
+        def mockreturn():
+            print('log')
+
+        monkeypatch.setattr(ran.commands, 'log', mockreturn)
+        commands(logs)
+
+        out, err = capsys.readouterr()
+
+        assert out == 'log\n'
+
+    def test_commands_with_default_arg(self, monkeypatch, capsys):
+        def mockreturn(cmd):
+            print(cmd)
+
+        monkeypatch.setattr(ran.commands, 'stats', mockreturn)
+        commands('42')
+
+        out, err = capsys.readouterr()
+
+        assert out == '42\n'
