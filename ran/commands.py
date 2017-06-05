@@ -16,7 +16,9 @@ def hlp():
     print('\t ' + ran.color.underline(ran.color.color('yellow', 'Help')))
     print()
     print('\t Commands:')
-    print('\t\t ' + ran.color.color('yellow', 'h, help') + ' - display this help text')
+    print(
+        '\t\t ' + ran.color.color('yellow', 'h, help') +
+        ' - display this help text')
     print('\t\t ' + ran.color.color('yellow', 'q, quit') + ' - exit ran')
 
     for i in range(3):
