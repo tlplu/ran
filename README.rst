@@ -5,6 +5,10 @@ ran
     :target: https://travis-ci.org/tlplu/ran
     :alt: Travis CI
 
+.. image:: https://codecov.io/gh/tlplu/ran/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/tlplu/ran
+    :alt: Codecov
+
 .. image:: https://codeclimate.com/github/tlplu/ran/badges/gpa.svg
     :target: https://codeclimate.com/github/tlplu/ran
     :alt: Code Climate
