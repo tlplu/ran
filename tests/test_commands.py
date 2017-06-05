@@ -1,7 +1,9 @@
 import os
 import pytest
+import json
 
 import ran.commands
+import ran.config
 
 
 def test_hlp(monkeypatch, capsys):
@@ -79,3 +81,108 @@ class TestCommands:
         out, err = capsys.readouterr()
 
         assert out == '42\n'
+
+
+class TestLog:
+
+    @pytest.fixture()
+    def fake_get_data(self, request):
+        with open('./fake.json', 'w') as f:
+            json.dump(
+                {'workouts': []},
+                f,
+                indent=4,
+                ensure_ascii=False,
+                separators=(', ', ': '))
+
+        def fin():
+            os.remove('./fake.json')
+        request.addfinalizer(fin)
+
+    def test_log_when_get_date_throw_cancel(self, fake_get_data, monkeypatch):
+        def mock(c, w, f):
+            return (c, 42,)
+
+        def mocke(c, w):
+            return (True, 42)
+
+        monkeypatch.setattr(ran.config, 'get_data_file', lambda: './fake.json')
+        monkeypatch.setattr(ran.screen, 'get_date', mocke)
+        monkeypatch.setattr(ran.screen, 'get_run_strength', mock)
+
+        ran.commands.log()
+
+        fl = ran.config.get_data_file()
+        with open(fl, 'r') as f:
+            data = json.load(f)
+
+        assert data['workouts'] == []
+
+    def test_log_when_get_run_strength_throw_cancel(
+            self,
+            fake_get_data,
+            monkeypatch):
+
+        def mock(c, w):
+            return (True, 42,)
+
+        def mocke(c, w, f):
+            return (c, 42)
+
+        monkeypatch.setattr(ran.config, 'get_data_file', lambda: './fake.json')
+        monkeypatch.setattr(ran.screen, 'get_date', mock)
+        monkeypatch.setattr(ran.screen, 'get_run_strength', mocke)
+
+        ran.commands.log()
+
+        fl = ran.config.get_data_file()
+        with open(fl, 'r') as f:
+            data = json.load(f)
+
+        assert data['workouts'] == []
+
+    def test_log_when_get_data_change_workout(
+            self,
+            fake_get_data,
+            monkeypatch):
+
+        def mock(c, w):
+            return (c, {'answer': 42})
+
+        def mocke(c, w, f):
+            return (c, w)
+
+        monkeypatch.setattr(ran.config, 'get_data_file', lambda: './fake.json')
+        monkeypatch.setattr(ran.screen, 'get_date', mock)
+        monkeypatch.setattr(ran.screen, 'get_run_strength', mocke)
+
+        ran.commands.log()
+
+        fl = ran.config.get_data_file()
+        with open(fl, 'r') as f:
+            data = json.load(f)
+
+        assert data['workouts'] == [{'answer': 42}]
+
+    def test_log_when_get_run_strength_change_workout(
+            self,
+            fake_get_data,
+            monkeypatch):
+
+        def mock(c, w):
+            return (c, w)
+
+        def mocke(c, w, f):
+            return (c, {'answer': 42})
+
+        monkeypatch.setattr(ran.config, 'get_data_file', lambda: './fake.json')
+        monkeypatch.setattr(ran.screen, 'get_date', mock)
+        monkeypatch.setattr(ran.screen, 'get_run_strength', mocke)
+
+        ran.commands.log()
+
+        fl = ran.config.get_data_file()
+        with open(fl, 'r') as f:
+            data = json.load(f)
+
+        assert data['workouts'] == [{'answer': 42}]
