@@ -1,5 +1,5 @@
-from .screen import logo, message
-from .commands import commands
+import ran.screen
+import ran.commands
 
 
 def main():
@@ -7,13 +7,14 @@ def main():
 
     cmd = ''
     while True:
-        logo()
-        commands(cmd)
+        ran.screen.logo()
+        ran.commands.commands(cmd)
 
         if cmd in ['l', 'log']:
             cmd = ''
         else:
-            cmd = message(cmd)
+            ran.screen.message(cmd)
+            cmd = input('> ')
 
         if cmd in ['q', 'quit', 'exit']:
             print('Bye!')
