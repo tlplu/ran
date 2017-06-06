@@ -1,6 +1,10 @@
 ran
 ===
 
+.. image:: https://img.shields.io/github/license/tlplu/ran.svg
+    :target: https://github.com/tlplu/ran/blob/master/LICENSE
+    :alt: License
+
 .. image:: https://travis-ci.org/tlplu/ran.svg?branch=master
     :target: https://travis-ci.org/tlplu/ran
     :alt: Travis CI
