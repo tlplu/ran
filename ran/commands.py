@@ -19,6 +19,9 @@ def hlp():
     print(
         '\t\t ' + ran.color.color('yellow', 'h, help') +
         ' - display this help text')
+    print(
+        '\t\t ' + ran.color.color('yellow', 'l, log') +
+        '  - log workout')
     print('\t\t ' + ran.color.color('yellow', 'q, quit') + ' - exit ran')
 
     for i in range(3):

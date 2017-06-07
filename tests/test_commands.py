@@ -18,6 +18,7 @@ def test_hlp(monkeypatch, capsys):
         '\n\t \x1b[4;93mHelp\x1b[0m\n\n' +
         '\t Commands:\n' +
         '\t\t \x1b[93mh, help\x1b[0m - display this help text\n' +
+        '\t\t \x1b[93ml, log\x1b[0m  - log workout\n' +
         '\t\t \x1b[93mq, quit\x1b[0m - exit ran\n\n\n\n')
 
     assert out == text
