@@ -8,7 +8,7 @@ import ran.config
 
 def test_hlp(monkeypatch, capsys):
     def mockreturn(fd):
-        return(42, 17)
+        return(42, 18)
 
     monkeypatch.setattr(os, 'get_terminal_size', mockreturn)
     ran.commands.hlp()

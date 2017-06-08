@@ -10,7 +10,7 @@ def hlp():
     """ Display help. """
     x, y = ran.utils.getxy()
 
-    for i in range(y - 16):
+    for i in range(y - 17):
         print()
 
     print('\t ' + ran.color.underline(ran.color.color('yellow', 'Help')))
