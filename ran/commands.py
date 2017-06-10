@@ -49,6 +49,9 @@ def log():
     (cancel, workout) = ran.screen.get_run_strength(cancel, workout, 1)
     (cancel, workout) = ran.screen.get_run_strength(cancel, workout, 0)
 
+    if workout['run']['type'] == '' and workout['strength']['pull-ups'] == '':
+        cancel = True
+
     if not cancel:
         fl = ran.config.get_data_file()
         with open(fl, 'r') as f:
