@@ -143,6 +143,29 @@ class TestLog:
 
         assert data['workouts'] == []
 
+    def test_log_without_run_and_strength(
+            self,
+            fake_get_data,
+            monkeypatch):
+
+        def mock(c, w):
+            return (c, {'run': {'type': ''}, 'strength': {'pull-ups': ''}})
+
+        def mocke(c, w, f):
+            return (c, {'run': {'type': ''}, 'strength': {'pull-ups': ''}})
+
+        monkeypatch.setattr(ran.config, 'get_data_file', lambda: './fake.json')
+        monkeypatch.setattr(ran.screen, 'get_date', mock)
+        monkeypatch.setattr(ran.screen, 'get_run_strength', mocke)
+
+        ran.commands.log()
+
+        fl = ran.config.get_data_file()
+        with open(fl, 'r') as f:
+            data = json.load(f)
+
+        assert data['workouts'] == []
+
     def test_log_when_get_date_change_workout(
             self,
             fake_get_data,
