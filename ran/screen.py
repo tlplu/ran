@@ -86,6 +86,9 @@ def get_type(cancel, workout):
                 if run in ['base', '']:
                     workout['run']['type'] = 'base'
                     break
+                elif run in ['long']:
+                    workout['run']['type'] = 'long'
+                    break
                 else:
                     logo()
                     details(workout)
@@ -199,8 +202,9 @@ def get_run_strength(cancel, workout, f):
                 if run in ['yes', 'y']:
                     if f == 1:
                         (cancel, workout) = get_type(cancel, workout)
-                        (cancel, workout) = get_duration(cancel, workout)
-                        (cancel, workout) = get_distance(cancel, workout)
+                        if workout['run']['type'] in ['base', 'long']:
+                            (cancel, workout) = get_duration(cancel, workout)
+                            (cancel, workout) = get_distance(cancel, workout)
                     else:
                         (cancel, workout) = get_sets(
                             cancel,
