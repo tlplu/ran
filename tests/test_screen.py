@@ -144,6 +144,13 @@ class TestGetDate:
 @pytest.mark.usefixtures('workout', 'mockreturn')
 class TestGetType:
 
+    @pytest.fixture(
+        params=[
+            'base',
+            'long'])
+    def types(self, request):
+        return request.param
+
     def test_get_type_with_true_cancel_arg(self, monkeypatch):
 
         monkeypatch.setitem(__builtins__, 'input', lambda x: '')
@@ -176,6 +183,17 @@ class TestGetType:
 
         assert not cancel
         assert data['run']['type'] == 'base'
+
+    def test_get_type_with_valid_input(self, monkeypatch, types):
+
+        monkeypatch.setitem(__builtins__, 'input', lambda x: types)
+        monkeypatch.setattr(os, 'get_terminal_size', mockreturn())
+
+        cancel = False
+        (cancel, data) = ran.screen.get_type(cancel, workout())
+
+        assert not cancel
+        assert data['run']['type'] == types
 
 
 @pytest.mark.usefixtures('workout', 'mockreturn')
